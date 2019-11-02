@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d(TAG, "onCreate: Asynctask starting");
         DownloadData downloadData=new DownloadData();
-        downloadData.execute("URL goes here");
+        downloadData.execute("http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=10/xml");
         Log.d(TAG, "onCreate: DOne");
     }
     private class DownloadData extends AsyncTask<String,Void,String>{
@@ -70,10 +70,15 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 reader.close();
+
+                return xmlResult.toString();
             }catch (MalformedURLException e){
                 Log.e(TAG, "downloadXML: Invalid URL"+e.getMessage());
             }catch (IOException e){
                 Log.e(TAG, "downloadXML: IO Exception reading data "+e.getMessage());
+            }catch (SecurityException e){
+                Log.e(TAG, "downloadXML: Need Internet Permission? "+ e.getMessage());
+//                e.printStackTrace();
             }
             return null;
         }
