@@ -14,6 +14,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import javax.net.ssl.HttpsURLConnection;
+
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
