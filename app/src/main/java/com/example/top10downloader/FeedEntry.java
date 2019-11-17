@@ -51,8 +51,8 @@ public class FeedEntry {
     public String toString() {
         return
                 "name=" + name + '\n' +
-                ", artist=" + artist + '\n' +
-                ", releaseDate=" + releaseDate + '\n' +
-                ", imageURL=" + imageURL + '\n' ;
+                        ", artist=" + artist + '\n' +
+                        ", releaseDate=" + releaseDate + '\n' +
+                        ", imageURL=" + imageURL + '\n';
     }
 }
