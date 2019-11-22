@@ -69,7 +69,11 @@ public class ParseApplications {
                     default:
                         //nothing to do
                 }
-                eventType=xpp.next();
+                eventType = xpp.next();
+            }
+            for (FeedEntry app : applications) {
+                Log.d(TAG, "*************");
+                Log.d(TAG, app.toString());
             }
 
         } catch (Exception e) {
