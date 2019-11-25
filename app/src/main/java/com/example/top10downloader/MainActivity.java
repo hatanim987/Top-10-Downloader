@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        listApps=findViewById(R.id.xmlListView);
+        listApps = findViewById(R.id.xmlListView);
 
         Log.d(TAG, "onCreate: Asynctask starting");
         DownloadData downloadData = new DownloadData();
@@ -44,9 +44,13 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "onPostExecute: parameter is " + s);
             ParseApplications parseApplications = new ParseApplications();
             parseApplications.parse(s);
-            ArrayAdapter<FeedEntry> arrayAdapter=new ArrayAdapter<>(
-                    MainActivity.this,R.layout.list_item,parseApplications.getApplications());
-            listApps.setAdapter(arrayAdapter);
+
+//            ArrayAdapter<FeedEntry> arrayAdapter = new ArrayAdapter<>(
+//                    MainActivity.this, R.layout.list_item, parseApplications.getApplications());
+//            listApps.setAdapter(arrayAdapter);
+
+            FeedAdapter feedAdapter=new FeedAdapter(MainActivity.this,R.layout.list_record,parseApplications.getApplications());
+            listApps.setAdapter(feedAdapter);
         }
 
         @Override
