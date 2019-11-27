@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d(TAG, "onCreate: Asynctask starting");
         DownloadData downloadData = new DownloadData();
-        downloadData.execute("http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=10/xml");
+        downloadData.execute("http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=200/xml");
         Log.d(TAG, "onCreate: DOne");
     }
 

@@ -33,17 +33,35 @@ public class FeedAdapter extends ArrayAdapter {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        View view = layoutInflater.inflate(layoutResource, parent, false);
-        TextView tvName = view.findViewById(R.id.tvName);
-        TextView tvArtist = view.findViewById(R.id.tvArtist);
-        TextView tvSummary = view.findViewById(R.id.tvSummary);
+        ViewHolder viewHolder;
+        if(convertView == null){
+            convertView = layoutInflater.inflate(layoutResource, parent, false);
+            viewHolder=new ViewHolder(convertView);
+            convertView.setTag(viewHolder);
+        }else{
+            viewHolder=(ViewHolder) convertView.getTag();
+        }
+//        TextView tvName = convertView.findViewById(R.id.tvName);
+//        TextView tvArtist = convertView.findViewById(R.id.tvArtist);
+//        TextView tvSummary = convertView.findViewById(R.id.tvSummary);
 
         FeedEntry feedEntry = applications.get(position);
 
-        tvName.setText(feedEntry.getName());
-        tvArtist.setText(feedEntry.getArtist());
-        tvSummary.setText(feedEntry.getSummary());
+        viewHolder.tvName.setText(feedEntry.getName());
+        viewHolder.tvArtist.setText(feedEntry.getArtist());
+        viewHolder.tvSummary.setText(feedEntry.getSummary());
 
-        return view;
+        return convertView;
+    }
+    private class ViewHolder{
+        final TextView tvName;
+        final TextView tvArtist;
+        final TextView tvSummary;
+
+        ViewHolder(View view){
+            tvName=view.findViewById(R.id.tvName);
+            tvArtist=view.findViewById(R.id.tvArtist);
+            tvSummary=view.findViewById(R.id.tvSummary);
+        }
     }
 }
