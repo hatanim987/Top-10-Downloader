@@ -53,15 +53,15 @@ public class FeedAdapter extends ArrayAdapter {
 
         return convertView;
     }
-    private class ViewHolder{
+    private class ViewHolder {
         final TextView tvName;
         final TextView tvArtist;
         final TextView tvSummary;
 
-        ViewHolder(View view){
-            tvName=view.findViewById(R.id.tvName);
-            tvArtist=view.findViewById(R.id.tvArtist);
-            tvSummary=view.findViewById(R.id.tvSummary);
+        ViewHolder(View view) {
+            tvName = view.findViewById(R.id.tvName);
+            tvArtist = view.findViewById(R.id.tvArtist);
+            tvSummary = view.findViewById(R.id.tvSummary);
         }
     }
 }
