@@ -22,15 +22,14 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private ListView listApps;
     private String feedUrl="http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=%d/xml";
-    private int fieldLimit=10;
+    private int fieldLimit=25;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         listApps = findViewById(R.id.xmlListView);
-
-        downloadUrl("http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=10/xml");
+        downloadUrl(String.format(feedUrl,fieldLimit));
         Log.d(TAG, "onCreate: Done");
     }
 
@@ -38,6 +37,12 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.feeds_menu, menu);
+        //to implement initial value whatever provided, below code added
+        if(fieldLimit==10){
+            menu.findItem(R.id.mnu10).setChecked(true);
+        }else{
+            menu.findItem(R.id.mnu25).setChecked(true);
+        }
         //getMenuInflater().inflate(R.menu.feeds_menu,menu);
         return true;
     }
@@ -45,22 +50,31 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        String feedUrl;
 
         switch (id) {
             case R.id.mnuFree:
-                feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=10/xml";
+                feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=%d/xml";
                 break;
             case R.id.mnuPaid:
-                feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/toppaidapplications/limit=10/xml";
+                feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/toppaidapplications/limit=%d/xml";
                 break;
             case R.id.mnuSongs:
-                feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topsongs/limit=10/xml";
+                feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topsongs/limit=%d/xml";
+                break;
+            case R.id.mnu10:
+            case R.id.mnu25:
+                if(!item.isChecked()){
+                    item.setChecked(true);
+                    fieldLimit=35-fieldLimit;
+                    Log.d(TAG, "onOptionsItemSelected: "+item.getTitle() +"changing fieldlimit to "+fieldLimit);
+                } else{
+                    Log.d(TAG, "onOptionsItemSelected: "+item.getTitle()+"Unchanged!");
+                }
                 break;
             default:
                 return super.onOptionsItemSelected(item);
         }
-        downloadUrl(feedUrl);
+        downloadUrl(String.format(feedUrl,fieldLimit));
         return true;
 
     }
