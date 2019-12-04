@@ -22,14 +22,22 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private ListView listApps;
     private String feedUrl="http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=%d/xml";
-    private int fieldLimit=25;
+    private int feedLimit=10;
+    private String feedCachedUrl="INVALIDATED";
+    public static final String STATE_URL="feedUrl";
+    public static final String STATE_LIMIT="feedLimit";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         listApps = findViewById(R.id.xmlListView);
-        downloadUrl(String.format(feedUrl,fieldLimit));
+        if(savedInstanceState!=null){
+            feedLimit=savedInstanceState.getInt(STATE_LIMIT);
+            feedUrl=savedInstanceState.getString(STATE_URL);
+        }
+
+        downloadUrl(String.format(feedUrl,feedLimit));
         Log.d(TAG, "onCreate: Done");
     }
 
@@ -37,13 +45,13 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.feeds_menu, menu);
+        //getMenuInflater().inflate(R.menu.feeds_menu,menu);
         //to implement initial value whatever provided, below code added
-        if(fieldLimit==10){
+        if(feedLimit==10){
             menu.findItem(R.id.mnu10).setChecked(true);
         }else{
             menu.findItem(R.id.mnu25).setChecked(true);
         }
-        //getMenuInflater().inflate(R.menu.feeds_menu,menu);
         return true;
     }
 
@@ -65,25 +73,40 @@ public class MainActivity extends AppCompatActivity {
             case R.id.mnu25:
                 if(!item.isChecked()){
                     item.setChecked(true);
-                    fieldLimit=35-fieldLimit;
-                    Log.d(TAG, "onOptionsItemSelected: "+item.getTitle() +"changing fieldlimit to "+fieldLimit);
+                    feedLimit=35-feedLimit;
+                    Log.d(TAG, "onOptionsItemSelected: "+item.getTitle() +"changing fieldlimit to "+feedLimit);
                 } else{
                     Log.d(TAG, "onOptionsItemSelected: "+item.getTitle()+"Unchanged!");
                 }
                 break;
+            case R.id.mnuRefresh:
+                feedCachedUrl="INVALIDATED";
+                break;
             default:
                 return super.onOptionsItemSelected(item);
         }
-        downloadUrl(String.format(feedUrl,fieldLimit));
+        downloadUrl(String.format(feedUrl,feedLimit));
         return true;
+    }
 
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putString(STATE_URL,feedUrl);
+        outState.putInt(STATE_LIMIT,feedLimit);
+        super.onSaveInstanceState(outState);
     }
 
     private void downloadUrl(String feedUrl) {
-        Log.d(TAG, "downloadUrl: Asynctask starting");
-        DownloadData downloadData = new DownloadData();
-        downloadData.execute(feedUrl);
-        Log.d(TAG, "downloadUrl: DOne");
+        if(!feedUrl.equalsIgnoreCase(feedCachedUrl)){
+            Log.d(TAG, "downloadUrl: Asynctask starting");
+            DownloadData downloadData = new DownloadData();
+            downloadData.execute(feedUrl);
+            Log.d(TAG, "downloadUrl: DOne");
+            feedCachedUrl=feedUrl;
+        } else{
+            Log.d(TAG, "downloadUrl: URL not changed!");
+        }
+        
     }
 
     private class DownloadData extends AsyncTask<String, Void, String> {
